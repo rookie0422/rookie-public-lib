@@ -1,0 +1,95 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.36.0.0
+Copyright (C) 2021 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 1 1, 1, LIC=GMZI6-DC2WG-302NC-76MLV-JICF0-NW5NI
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.36.0.0
+Toolchain Path:  D:\Keilv5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 7 (build 960)
+Assembler:       Armasm.exe V5.06 update 7 (build 960)
+Linker/Locator:  ArmLink.exe V5.06 update 7 (build 960)
+Library Manager: ArmAr.exe V5.06 update 7 (build 960)
+Hex Converter:   FromElf.exe V5.06 update 7 (build 960)
+CPU DLL:         SARMCM3.DLL V5.36.0.0
+Dialog DLL:      DCM.DLL V1.17.3.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.9.0
+Dialog DLL:      TCM.DLL V1.53.0.0
+ 
+<h2>Project:</h2>
+D:\stm103\HalProject\FreeRTOS_demo1\MDK-ARM\FreeRTOS_demo1.uvprojx
+Project File Date:  02/26/2024
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\Keilv5\ARM\ARMCC\Bin'
+Build target 'FreeRTOS_demo1'
+compiling croutine.c...
+compiling port.c...
+compiling queue.c...
+compiling event_groups.c...
+compiling list.c...
+compiling random.c...
+compiling heap_4.c...
+compiling timers.c...
+compiling stream_buffer.c...
+compiling network.c...
+..\mqttclient\network\network.c(78): warning:  #223-D: function "memset" declared implicitly
+      memset(n, 0, sizeof(network_t));
+..\mqttclient\network\network.c: 1 warning, 0 errors
+compiling platform_mutex.c...
+compiling tasks.c...
+compiling platform_memory.c...
+compiling platform_thread.c...
+compiling platform_timer.c...
+compiling cmsis_os2.c...
+compiling mqttclient.c...
+..\mqttclient\mqttclient\mqttclient.c(1076): warning:  #68-D: integer conversion resulted in a change of sign
+          RETURN_ERROR(MQTT_MEM_NOT_ENOUGH_ERROR);
+..\mqttclient\mqttclient\mqttclient.c(1098): warning:  #68-D: integer conversion resulted in a change of sign
+          RETURN_ERROR(MQTT_MEM_NOT_ENOUGH_ERROR);
+..\mqttclient\mqttclient\mqttclient.c: 2 warnings, 0 errors
+compiling freertos.c...
+../ModuleDrivers/ring_buffer.h(54): warning:  #1-D: last line of file ends without a newline
+  #endif /* __RING_BUFFER_H */
+../Core/Src/freertos.c: 1 warning, 0 errors
+compiling main.c...
+../ModuleDrivers/ring_buffer.h(54): warning:  #1-D: last line of file ends without a newline
+  #endif /* __RING_BUFFER_H */
+../ModuleDrivers/driver_key.h(69): warning:  #1-D: last line of file ends without a newline
+  #endif /* __DRIVER_KEY_H */
+../Core/Src/main.c: 2 warnings, 0 errors
+linking...
+Program Size: Code=12552 RO-data=428 RW-data=144 ZI-data=9240  
+FromELF: creating hex file...
+"FreeRTOS_demo1\FreeRTOS_demo1.axf" - 0 Error(s), 6 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.8.0.pack
+                ARM.CMSIS.5.8.0
+                CMSIS (Common Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.5.0
+
+Package Vendor: Keil
+                https://www.keil.com/pack/Keil.STM32F1xx_DFP.2.4.1.pack
+                Keil.STM32F1xx_DFP.2.4.1
+                STMicroelectronics STM32F1 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_FreeRTOS_demo1
+  D:\Users\frj\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include
+  D:\Users\frj\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.4.1\Device\Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.5.0
+      Include file:  CMSIS\Core\Include\tz_context.h
+Build Time Elapsed:  00:00:02
+</pre>
+</body>
+</html>

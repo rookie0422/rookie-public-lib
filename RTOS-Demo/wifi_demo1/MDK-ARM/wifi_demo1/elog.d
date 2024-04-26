@@ -1,0 +1,9 @@
+wifi_demo1\elog.o: ..\easylogger\src\elog.c
+wifi_demo1\elog.o: ../easylogger/inc/elog.h
+wifi_demo1\elog.o: ../easylogger/inc/elog_cfg.h
+wifi_demo1\elog.o: D:\Keilv5\ARM\ARMCC\Bin\..\include\stdint.h
+wifi_demo1\elog.o: D:\Keilv5\ARM\ARMCC\Bin\..\include\stddef.h
+wifi_demo1\elog.o: D:\Keilv5\ARM\ARMCC\Bin\..\include\stdbool.h
+wifi_demo1\elog.o: D:\Keilv5\ARM\ARMCC\Bin\..\include\string.h
+wifi_demo1\elog.o: D:\Keilv5\ARM\ARMCC\Bin\..\include\stdarg.h
+wifi_demo1\elog.o: D:\Keilv5\ARM\ARMCC\Bin\..\include\stdio.h

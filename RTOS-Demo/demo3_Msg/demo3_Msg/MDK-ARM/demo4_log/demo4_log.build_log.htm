@@ -1,0 +1,140 @@
+<html>
+<body>
+<pre>
+<h1>�Vision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ��Vision V5.36.0.0
+Copyright (C) 2021 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 1 1, 1, LIC=GMZI6-DC2WG-302NC-76MLV-JICF0-NW5NI
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.36.0.0
+Toolchain Path:  D:\Keilv5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 7 (build 960)
+Assembler:       Armasm.exe V5.06 update 7 (build 960)
+Linker/Locator:  ArmLink.exe V5.06 update 7 (build 960)
+Library Manager: ArmAr.exe V5.06 update 7 (build 960)
+Hex Converter:   FromElf.exe V5.06 update 7 (build 960)
+CPU DLL:         SARMCM3.DLL V5.36.0.0
+Dialog DLL:      DCM.DLL V1.17.3.0
+Target DLL:      CMSIS_AGDI.dll V1.33.0.0
+Dialog DLL:      TCM.DLL V1.53.0.0
+ 
+<h2>Project:</h2>
+D:\stm103\HalProject\demo3_Msg\demo3_Msg\MDK-ARM\demo4_log.uvprojx
+Project File Date:  02/27/2024
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\Keilv5\ARM\ARMCC\Bin'
+Rebuild target 'demo4_log'
+assembling startup_stm32f103xe.s...
+compiling stm32f1xx_hal_gpio_ex.c...
+compiling stm32f1xx_hal.c...
+compiling stm32f1xx_hal_gpio.c...
+compiling stm32f1xx_hal_cortex.c...
+compiling stm32f1xx_hal_msp.c...
+compiling stm32f1xx_hal_tim_ex.c...
+compiling stm32f1xx_it.c...
+compiling stm32f1xx_hal_rcc_ex.c...
+compiling main.c...
+..\user\app.h(4): warning:  #1295-D: Deprecated declaration app_init - give arg types
+  void app_init();
+..\user\app.h(6): warning:  #1-D: last line of file ends without a newline
+  #endif
+../Core/Src/main.c(31): warning:  #47-D: incompatible redefinition of macro "LOG_TAG"  (declared at line 216 of "../easylogger/inc/elog.h")
+  #define LOG_TAG "WIRELESS"
+../Core/Src/main.c: 3 warnings, 0 errors
+compiling stm32f1xx_hal_rcc.c...
+compiling elog_async.c...
+compiling stm32f1xx_hal_dma.c...
+compiling elog.c...
+compiling stm32f1xx_hal_tim.c...
+compiling elog_buf.c...
+compiling elog_utils.c...
+compiling elog_port.c...
+..\easylogger\port\elog_port.c(93): warning:  #940-D: missing return statement at end of non-void function "elog_port_get_time" 
+  }
+..\easylogger\port\elog_port.c(115): warning:  #1-D: last line of file ends without a newline
+  }
+..\easylogger\port\elog_port.c: 2 warnings, 0 errors
+compiling vMsgExec.c...
+compiling RTX_Conf_CM.c...
+compiling stm32f1xx_hal_flash.c...
+compiling dht11.c...
+compiling stm32f1xx_hal_exti.c...
+compiling stm32f1xx_hal_pwr.c...
+compiling stm32f1xx_hal_flash_ex.c...
+compiling bsp.c...
+compiling system_stm32f1xx.c...
+compiling app.c...
+..\user\app.h(4): warning:  #1295-D: Deprecated declaration app_init - give arg types
+  void app_init();
+..\user\app.h(6): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\user\app.c(7): warning:  #47-D: incompatible redefinition of macro "LOG_TAG"  (declared at line 216 of "../easylogger/inc/elog.h")
+  #define LOG_TAG "APP"
+..\user\app.c: 3 warnings, 0 errors
+compiling tlsf.c...
+..\..\..\demo4_log\demo4_log\user\mem\tlsf.c(570): warning:  #68-D: integer conversion resulted in a change of sign
+          return -1;
+..\..\..\demo4_log\demo4_log\user\mem\tlsf.c(575): warning:  #68-D: integer conversion resulted in a change of sign
+          return -1;
+..\..\..\demo4_log\demo4_log\user\mem\tlsf.c(1093): warning:  #1293-D: assignment in condition
+      if (!(ptr_aux = malloc_ex(new_size, mem_pool))){ 
+..\..\..\demo4_log\demo4_log\user\mem\tlsf.c(1119): warning:  #1293-D: assignment in condition
+      if (!(ptr = malloc_ex(nelem * elem_size, mem_pool)))  /* 实际分配过程与malloc相同，使用malloc_ex函数分配*/
+..\..\..\demo4_log\demo4_log\user\mem\tlsf.c(114): warning:  #550-D: variable "mem_errorno"  was set but never used
+  static uint8_t mem_errorno = 0;
+..\..\..\demo4_log\demo4_log\user\mem\tlsf.c: 5 warnings, 0 errors
+compiling stm32f1xx_hal_uart.c...
+linking...
+Program Size: Code=25080 RO-data=1896 RW-data=168 ZI-data=43504  
+FromELF: creating hex file...
+"demo4_log\demo4_log.axf" - 0 Error(s), 13 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.8.0.pack
+                ARM.CMSIS.5.8.0
+                CMSIS (Common Microcontroller Software Interface Standard)
+   * Component: RTOS Version: 1.0.0
+   * Component: CORE Version: 5.5.0
+   * Component: Keil RTX Version: 4.82.0
+
+Package Vendor: Keil
+                https://www.keil.com/pack/Keil.STM32F1xx_DFP.2.4.1.pack
+                Keil.STM32F1xx_DFP.2.4.1
+                STMicroelectronics STM32F1 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_demo4_log
+  D:\Users\frj\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include
+  D:\Users\frj\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\RTOS\RTX\INC
+  D:\Users\frj\AppData\Local\Arm\Packs\Keil\STM32F1xx_DFP\2.4.1\Device\Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ::CMSIS:RTOS:1.0.0 (API)
+
+   * Component: ARM::CMSIS:CORE:5.5.0
+      Include file:  CMSIS\Core\Include\tz_context.h
+
+   * Component: ARM::CMSIS:RTOS:Keil RTX:4.82.0
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Mutex.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\MemPool.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\MsgQueue.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Semaphore.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Thread.c
+      Source file:   CMSIS\RTOS\RTX\SRC\ARM\SVC_Table.s
+      Library file:  CMSIS\RTOS\RTX\LIB\ARM\RTX_CM3.lib
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Timer.c
+      Include file:  CMSIS\RTOS\RTX\UserCodeTemplates\osObjects.h
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\main.c
+      Include file:  CMSIS\RTOS\RTX\INC\cmsis_os.h
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\MailQueue.c
+      Source file:   CMSIS\RTOS\RTX\Templates\RTX_Conf_CM.c
+Build Time Elapsed:  00:00:07
+</pre>
+</body>
+</html>

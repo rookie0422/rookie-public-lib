@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "main.h": "c",
+        "driver_key.h": "c"
+    }
+}

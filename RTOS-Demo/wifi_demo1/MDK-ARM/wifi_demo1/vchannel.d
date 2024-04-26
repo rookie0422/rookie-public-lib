@@ -1,0 +1,10 @@
+wifi_demo1\vchannel.o: ..\src\vchannel.c
+wifi_demo1\vchannel.o: ..\src\vchannel.h
+wifi_demo1\vchannel.o: D:\Keilv5\ARM\ARMCC\Bin\..\include\stdint.h
+wifi_demo1\vchannel.o: ..\src\vmsgexec.h
+wifi_demo1\vchannel.o: D:\Users\frj\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\RTOS\RTX\INC\cmsis_os.h
+wifi_demo1\vchannel.o: D:\Keilv5\ARM\ARMCC\Bin\..\include\stddef.h
+wifi_demo1\vchannel.o: ../src/mem/dyn_mem.h
+wifi_demo1\vchannel.o: ../src/mem/tlsf.h
+wifi_demo1\vchannel.o: ..\src\vlist.h
+wifi_demo1\vchannel.o: D:\Keilv5\ARM\ARMCC\Bin\..\include\stdbool.h

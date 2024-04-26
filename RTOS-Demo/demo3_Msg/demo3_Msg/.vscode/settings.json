@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "vmsgexec.h": "c",
+        "main.h": "c",
+        "elog.h": "c"
+    }
+}

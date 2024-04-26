@@ -1,0 +1,11 @@
+freertos_demo1\mqttsubscribeserver.o: ..\mqttclient\mqtt\MQTTSubscribeServer.c
+freertos_demo1\mqttsubscribeserver.o: ..\mqttclient\mqtt\MQTTPacket.h
+freertos_demo1\mqttsubscribeserver.o: ..\mqttclient\mqtt\MQTTConnect.h
+freertos_demo1\mqttsubscribeserver.o: ..\mqttclient\mqtt\MQTTPublish.h
+freertos_demo1\mqttsubscribeserver.o: ..\mqttclient\mqtt\MQTTSubscribe.h
+freertos_demo1\mqttsubscribeserver.o: ..\mqttclient\mqtt\MQTTUnsubscribe.h
+freertos_demo1\mqttsubscribeserver.o: ..\mqttclient\mqtt\MQTTFormat.h
+freertos_demo1\mqttsubscribeserver.o: ..\mqttclient\mqtt\StackTrace.h
+freertos_demo1\mqttsubscribeserver.o: D:\Keilv5\ARM\ARMCC\Bin\..\include\stdio.h
+freertos_demo1\mqttsubscribeserver.o: ..\mqttclient\mqtt\MQTTPacket.h
+freertos_demo1\mqttsubscribeserver.o: D:\Keilv5\ARM\ARMCC\Bin\..\include\string.h
