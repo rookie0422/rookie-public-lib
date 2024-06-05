@@ -26,6 +26,5 @@
 
 ## 5. [嵌入式知识点](https://github.com/rookie0422/rookie-public-lib/tree/main/嵌入式知识点)
 
-这是本人的一些学习笔记
-
+这是关于嵌入式的学习笔记
 
