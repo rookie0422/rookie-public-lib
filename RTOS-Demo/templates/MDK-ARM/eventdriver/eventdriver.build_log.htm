@@ -1,0 +1,107 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.36.0.0
+Copyright (C) 2021 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 2 Administrator, 2, LIC=JL28G-VX6W2-RAMDM-X3MZW-9WMZY-I62VA
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.36.0.0
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 7 (build 960)
+Assembler:       Armasm.exe V5.06 update 7 (build 960)
+Linker/Locator:  ArmLink.exe V5.06 update 7 (build 960)
+Library Manager: ArmAr.exe V5.06 update 7 (build 960)
+Hex Converter:   FromElf.exe V5.06 update 7 (build 960)
+CPU DLL:         SARMCM3.DLL V5.36.0.0
+Dialog DLL:      DCM.DLL V1.17.3.0
+Target DLL:      CMSIS_AGDI.dll V1.33.0.0
+Dialog DLL:      TCM.DLL V1.53.0.0
+ 
+<h2>Project:</h2>
+C:\keilp\gui\MDK-ARM\eventdriver.uvprojx
+Project File Date:  06/27/2023
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'eventdriver'
+compiling app.c...
+..\user\app.h(3): warning:  #1295-D: Deprecated declaration app_init - give arg types
+  void app_init();
+..\user\bsp.h(9): warning:  #1295-D: Deprecated declaration led_on - give arg types
+  void led_on();
+..\user\bsp.h(10): warning:  #1295-D: Deprecated declaration led_off - give arg types
+  void led_off();
+..\user\bsp.h(11): warning:  #1-D: last line of file ends without a newline
+  void led_toggole();
+..\user\bsp.h(11): warning:  #1295-D: Deprecated declaration led_toggole - give arg types
+  void led_toggole();
+..\user\lcd\hmi_driver.h(73): warning:  #1295-D: Deprecated declaration GUI_CleanScreen - give arg types
+  void GUI_CleanScreen();
+..\user\lcd\hmi_driver.h(270): warning:  #1295-D: Deprecated declaration CalibrateTouchPane - give arg types
+  void	CalibrateTouchPane();
+..\user\lcd\hmi_driver.h(275): warning:  #1295-D: Deprecated declaration TestTouchPane - give arg types
+  void TestTouchPane();
+..\user\lcd\hmi_driver.h(624): warning:  #1295-D: Deprecated declaration BatchEnd - give arg types
+  void BatchEnd();
+..\user\lcd\hmi_driver.h(720): warning:  #1295-D: Deprecated declaration FlashEndSaveControl - give arg types
+  void FlashEndSaveControl();
+..\user\lcd\cmd_queue.h(36): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\user\lcd\cmd_process.h(74): warning:  #1295-D: Deprecated declaration NOTIFYHandShake - give arg types
+  void NOTIFYHandShake();
+..\user\app.c(189): warning:  #177-D: variable "value"  was declared but never referenced
+      uint32 value = PTR2U32(msg->param);                                              //æ•°å€?
+..\user\app.c: 13 warnings, 0 errors
+linking...
+Program Size: Code=28548 RO-data=1788 RW-data=152 ZI-data=16600  
+FromELF: creating hex file...
+"eventdriver\eventdriver.axf" - 0 Error(s), 13 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.8.0.pack
+                ARM.CMSIS.5.8.0
+                CMSIS (Common Microcontroller Software Interface Standard)
+   * Component: RTOS Version: 1.0.0
+   * Component: CORE Version: 5.5.0
+   * Component: Keil RTX Version: 4.82.0
+
+Package Vendor: Geehy
+                https://www.geehy.com/uploads/tool/Geehy.APM32F1xx_DFP.1.1.0.pack
+                Geehy.APM32F1xx_DFP.1.1.0
+                Geehy Semiconductor APM32F1 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_eventdriver
+  C:\Keil_v5\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include
+  C:\Keil_v5\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\RTOS\RTX\INC
+  C:\Keil_v5\Arm\Packs\Geehy\APM32F1xx_DFP\1.1.0\Device\Device\Geehy\APM32F10x\Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ::CMSIS:RTOS:1.0.0 (API)
+
+   * Component: ARM::CMSIS:CORE:5.5.0
+
+   * Component: ARM::CMSIS:RTOS:Keil RTX:4.82.0
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\main.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\MailQueue.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\MemPool.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\MsgQueue.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Mutex.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Semaphore.c
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Thread.c
+      Include file:  CMSIS\RTOS\RTX\INC\cmsis_os.h
+      Source file:   CMSIS\RTOS\RTX\Templates\RTX_Conf_CM.c
+      Include file:  CMSIS\RTOS\RTX\UserCodeTemplates\osObjects.h
+      Source file:   CMSIS\RTOS\RTX\SRC\ARM\SVC_Table.s
+      Library file:  CMSIS\RTOS\RTX\LIB\ARM\RTX_CM3.lib
+      Source file:   CMSIS\RTOS\RTX\UserCodeTemplates\Timer.c
+Build Time Elapsed:  00:00:04
+</pre>
+</body>
+</html>

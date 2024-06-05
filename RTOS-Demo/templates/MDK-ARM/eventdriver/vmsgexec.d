@@ -1,0 +1,9 @@
+eventdriver\vmsgexec.o: ..\user\vMsgExec.c
+eventdriver\vmsgexec.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+eventdriver\vmsgexec.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+eventdriver\vmsgexec.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+eventdriver\vmsgexec.o: ../user/mem/dyn_mem.h
+eventdriver\vmsgexec.o: ../user/mem/tlsf.h
+eventdriver\vmsgexec.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+eventdriver\vmsgexec.o: ..\user\vMsgExec.h
+eventdriver\vmsgexec.o: C:\Keil_v5\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\RTOS\RTX\INC\cmsis_os.h
