@@ -1,9 +1,0 @@
-eventdriver\system_apm32f10x.o: RTE\Device\APM32F103C8\system_apm32f10x.c
-eventdriver\system_apm32f10x.o: C:\Keil_v5\Arm\Packs\Geehy\APM32F1xx_DFP\1.1.0\Device\Device\Geehy\APM32F10x\Include\apm32f10x.h
-eventdriver\system_apm32f10x.o: ../Drivers/CMSIS/Include/core_cm3.h
-eventdriver\system_apm32f10x.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
-eventdriver\system_apm32f10x.o: ../Drivers/CMSIS/Include/cmsis_version.h
-eventdriver\system_apm32f10x.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
-eventdriver\system_apm32f10x.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
-eventdriver\system_apm32f10x.o: C:\Keil_v5\Arm\Packs\Geehy\APM32F1xx_DFP\1.1.0\Device\Device\Geehy\APM32F10x\Include\system_apm32f10x.h
-eventdriver\system_apm32f10x.o: C:\Keil_v5\Arm\Packs\Geehy\APM32F1xx_DFP\1.1.0\Device\Device\Geehy\APM32F10x\Include\apm32f10x.h

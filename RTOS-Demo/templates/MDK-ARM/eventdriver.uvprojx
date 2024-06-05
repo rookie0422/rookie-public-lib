@@ -539,11 +539,6 @@
           <GroupName>user</GroupName>
           <Files>
             <File>
-              <FileName>vMsgExec.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\vMsgExec.c</FilePath>
-            </File>
-            <File>
               <FileName>app.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\app.c</FilePath>
@@ -554,11 +549,6 @@
               <FilePath>..\user\bsp.c</FilePath>
             </File>
             <File>
-              <FileName>key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\key.c</FilePath>
-            </File>
-            <File>
               <FileName>dht11.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\dht11.c</FilePath>
@@ -567,6 +557,31 @@
               <FileName>uart_interface.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\uart_interface.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\os_port.c</FilePath>
+            </File>
+            <File>
+              <FileName>vkey.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\vkey.c</FilePath>
+            </File>
+            <File>
+              <FileName>vmsgexec.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\vmsgexec.c</FilePath>
+            </File>
+            <File>
+              <FileName>vchannel.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\vchannel.c</FilePath>
+            </File>
+            <File>
+              <FileName>vlist.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\vlist.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -643,5 +658,14 @@
       </file>
     </files>
   </RTE>
+
+  <LayerInfo>
+    <Layers>
+      <Layer>
+        <LayName>eventdriver</LayName>
+        <LayPrjMark>1</LayPrjMark>
+      </Layer>
+    </Layers>
+  </LayerInfo>
 
 </Project>

@@ -36,37 +36,29 @@ typedef struct app_t {
 
 app_t g_app;
 
-
 void app_vkey_press_callback(void *rev_release_obj, uint16_t key_code)
 {
     if (key_code == KEY1) {
-
     } else if (key_code == KEY2) {
-        
-
     } else if (key_code == KEY3) {
-    } 
+    }
 }
 
 void app_vkey_release_callback(void *rev_release_obj, uint16_t key_code)
 {
     if (key_code == KEY1) {
-
     } else if (key_code == KEY2) {
-        
-
     } else if (key_code == KEY3) {
-    } 
+    }
 }
-
 
 void app_init()
 {
     memset(&g_app, 0, sizeof(app_t));
 
-    g_app.main_hwnd = MsgExec_CreateModule(app_dlgcallback, 0);
+    g_app.main_wnd = msgexec_create_module(app_dlgcallback, 0);
 
-    if (g_app.main_hwnd == NULL) {
+    if (g_app.main_wnd == NULL) {
         log_e("app_init MsgExec_CreateModule error!");
     } else {
         log_i("app_init MsgExec_CreateModule ok!");
@@ -81,32 +73,32 @@ void app_init()
     uart_interface__start_receive(&g_app.lcd_uart, NULL, app_uart_handle_effective_frame_callback);
 }
 
-void app_dlgcallback(vwm_message_t *pMsg)
+void app_dlgcallback(vwm_message_t *pmsg)
 {
     int16_t ledshowdelay;
 
-    switch (pMsg->MsgId) {
+    switch (pmsg->msg_id) {
         case VWM_INIT_DIALOG:
-            g_app.blink_timer = VWM_CreateTimer(pMsg->hWin, 0, 500, 1);
+            g_app.blink_timer = vwm_create_timer(pmsg->dest_win_handle, 0, 500, 1);
             if (g_app.blink_timer == NULL) {
                 log_e("app_init create blink_timer error!");
             } else {
                 log_i("app_init create blink_timer ok!");
-                VWM_StartTimer(g_app.blink_timer);
+                vwm_start_timer(g_app.blink_timer);
             }
 
-            g_app.sensor_timer = VWM_CreateTimer(pMsg->hWin, 0, 1000, 1);
+            g_app.sensor_timer = vwm_create_timer(pmsg->dest_win_handle, 0, 1000, 1);
             if (g_app.sensor_timer == NULL) {
                 log_e("app_init create sensor_timer error!");
             } else {
                 log_i("app_init create sensor_timer ok!");
-                VWM_StartTimer(g_app.sensor_timer);
+                vwm_start_timer(g_app.sensor_timer);
             }
 
             break;
 
         case VWM_TIMER:
-            if (pMsg->Data.v == g_app.blink_timer) {
+            if (pmsg->data.v == g_app.blink_timer) {
                 if (HAL_GPIO_ReadPin(LED_GPIO_Port, LED_Pin) == GPIO_PIN_SET) {
                     if (g_app.humi >= 90) {
                         ledshowdelay = 100;
@@ -118,11 +110,11 @@ void app_dlgcallback(vwm_message_t *pMsg)
                             ledshowdelay = 100;
                         }
                     }
-                    VWM_RestartTimer(g_app.blink_timer, ledshowdelay);
+                    vwm_restart_timer(g_app.blink_timer, ledshowdelay);
                     log_i("LED Timer:%d", ledshowdelay);
                 }
                 led_toggole();
-            } else if (pMsg->Data.v == g_app.sensor_timer) {
+            } else if (pmsg->data.v == g_app.sensor_timer) {
                 if (DHT11_Read_Data((uint8_t *)&g_app.temp, (uint8_t *)&g_app.humi) != 0) {
                     log_e("DHT11_Read_Data error!");
                 } else {
@@ -135,26 +127,6 @@ void app_dlgcallback(vwm_message_t *pMsg)
 
         default:
             break;
-    }
-}
-
-void test_lcd()
-{
-    uint8_t sendbuff[] = { 0xEE, 0xB1, 0x10, 0x00, 0x00, 0x00, 0x02, 0x32, 0x38, 0xFF, 0xFC, 0xFF, 0xFF };
-    HAL_UART_Transmit(&huart2, (uint8_t *)sendbuff, sizeof(sendbuff), sizeof(sendbuff) * 10 + 100);
-}
-
-void app_key_change_callback(key_action_t pressorrelase, uint8_t keyvalue)
-{
-    if (pressorrelase == KEY_RELEASEED) {
-        log_i("app_key_release callback %d", keyvalue);
-        if (keyvalue == KEY_1) {
-            // test_lcd();
-            // log_i("Temp:%d; Humi:%d", g_app.temp, g_app.humi);
-
-            //  SetTextInt32(0, 2, g_app.temp, 0, 2);
-            //SetTextValue(0, 2, "28");
-        }
     }
 }
 

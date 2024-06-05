@@ -9,7 +9,7 @@
 
 #endif
 #define FIRMWAREVERSIONBUILD 0x23 //35
-#include "stm32f0xx_hal.h"
+#include "stm32f1xx_hal.h"
 #include <stdint.h>
 /**
  * STM32F103VET 共512K字节Flash，2K为一页，计数值保存到最后一页，其他信息保存在倒数第2页
