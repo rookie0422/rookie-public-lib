@@ -8,9 +8,8 @@
 
 msgexec_t g_msg_exec;
 
-osMailQDef (msgexec_queue, 64, vwm_message_t);  // Declare mail queue
-osMailQId  msgexec_queue_id;                 // Mail queue ID
-
+osMailQDef(msgexec_queue, 64, vwm_message_t); // Declare mail queue
+osMailQId msgexec_queue_id;                   // Mail queue ID
 
 /**
 * @brief 消息执行体的初始化
@@ -18,9 +17,9 @@ osMailQId  msgexec_queue_id;                 // Mail queue ID
 */
 uint8_t msgexec_init(void)
 {
-	memset(&g_msg_exec, 0, sizeof(msgexec_t));
-	msgexec_queue_id = osMailCreate(osMailQ(msgexec_queue), NULL);
-	return 0;
+    memset(&g_msg_exec, 0, sizeof(msgexec_t));
+    msgexec_queue_id = osMailCreate(osMailQ(msgexec_queue), NULL);
+    return 0;
 }
 
 /**
@@ -29,33 +28,33 @@ uint8_t msgexec_init(void)
 */
 uint8_t msgexec_exec(void)
 {
-	vwm_message_t  *msg;
-	osEvent  evt;
-	vwindow_t *pdestwnd;
+    vwm_message_t *msg;
+    osEvent evt;
+    vwindow_t *pdestwnd;
 
-	evt = osMailGet(msgexec_queue_id, osWaitForever);        // wait for mail
-	if (evt.status == osEventMail) {
-		msg = evt.value.p;
+    evt = osMailGet(msgexec_queue_id, osWaitForever); // wait for mail
+    if (evt.status == osEventMail) {
+        msg = evt.value.p;
 
-		if (msg->dest_win_handle != NULL) {
-			pdestwnd = (vwindow_t *)msg->dest_win_handle;
+        if (msg->dest_win_handle != NULL) {
+            pdestwnd = (vwindow_t *)msg->dest_win_handle;
 
-			if (pdestwnd->wndProc != NULL) {
-				pdestwnd->wndProc(msg);
-			}
-		}
-		
-		//如果是按键消息，释放按键消息的内存
-		if (msg->auto_free_p == 1) {
-			if (msg->data.p != NULL) {
-				dm_free(msg->data.p);
-			}
-		}
-		
-		osMailFree(msgexec_queue_id, msg);  // free memory allocated for mail
-	}
-	
-	return 0;
+            if (pdestwnd->wndProc != NULL) {
+                pdestwnd->wndProc(msg);
+            }
+        }
+
+        //如果是按键消息，释放按键消息的内存
+        if (msg->auto_free_p == 1) {
+            if (msg->data.p != NULL) {
+                dm_free(msg->data.p);
+            }
+        }
+
+        osMailFree(msgexec_queue_id, msg); // free memory allocated for mail
+    }
+
+    return 0;
 }
 
 /**
@@ -65,14 +64,13 @@ uint8_t msgexec_exec(void)
 
 uint32_t msgexec_get_userdata(vwm_win_handle_t dest_win_handle)
 {
-	vwindow_t *thiswnd;
-	thiswnd = (vwindow_t *)dest_win_handle;
-	if (dest_win_handle == NULL)
-		return 0;
+    vwindow_t *thiswnd;
+    thiswnd = (vwindow_t *)dest_win_handle;
+    if (dest_win_handle == NULL)
+        return 0;
 
-	return thiswnd->userdata;
+    return thiswnd->userdata;
 }
-
 
 /**
 * @brief	创建一个能被接收消息的模块
@@ -83,42 +81,41 @@ uint32_t msgexec_get_userdata(vwm_win_handle_t dest_win_handle)
 
 vwm_win_handle_t msgexec_create_module(vwm_callback_t callback, uint32_t userdata)
 {
-	vwindow_t *thiswnd = (vwindow_t *)dm_alloc(sizeof(vwindow_t));
-	vwm_message_t *pmsg;
-	
-	if (thiswnd == NULL)
-		return NULL;
-	memset(thiswnd, 0, sizeof(vwindow_t));
-	
-	thiswnd->userdata = userdata;
-	thiswnd->wndProc = callback;
-	
-	if (g_msg_exec.top_window == NULL) {
-		g_msg_exec.top_window = thiswnd;
-		g_msg_exec.bottom_window = thiswnd;
-		thiswnd->nextWnd = NULL;
-		thiswnd->preWnd = NULL;
-	}
-	else {
-		g_msg_exec.top_window->nextWnd =  thiswnd;
-		thiswnd->preWnd = g_msg_exec.top_window;
-		g_msg_exec.top_window = thiswnd;
-		thiswnd->nextWnd = NULL;
-	}
+    vwindow_t *thiswnd = (vwindow_t *)dm_alloc(sizeof(vwindow_t));
+    vwm_message_t *pmsg;
 
-	//发送初始化消息
-	pmsg = msgexec_alloc_message();
-	if (pmsg == NULL) {
-		msgexec_free_module((vwm_win_handle_t)thiswnd);
-		return NULL;
-	}
-	pmsg->msg_id = VWM_INIT_DIALOG;
-	pmsg->dest_win_handle = (vwm_win_handle_t)thiswnd;
-	pmsg->src_win_handle = (vwm_win_handle_t)thiswnd;
+    if (thiswnd == NULL)
+        return NULL;
+    memset(thiswnd, 0, sizeof(vwindow_t));
 
-	msgexec_put_message(pmsg);
-	
-	return (vwm_win_handle_t)thiswnd;
+    thiswnd->userdata = userdata;
+    thiswnd->wndProc = callback;
+
+    if (g_msg_exec.top_window == NULL) {
+        g_msg_exec.top_window = thiswnd;
+        g_msg_exec.bottom_window = thiswnd;
+        thiswnd->nextWnd = NULL;
+        thiswnd->preWnd = NULL;
+    } else {
+        g_msg_exec.top_window->nextWnd = thiswnd;
+        thiswnd->preWnd = g_msg_exec.top_window;
+        g_msg_exec.top_window = thiswnd;
+        thiswnd->nextWnd = NULL;
+    }
+
+    //发送初始化消息
+    pmsg = msgexec_alloc_message();
+    if (pmsg == NULL) {
+        msgexec_free_module((vwm_win_handle_t)thiswnd);
+        return NULL;
+    }
+    pmsg->msg_id = VWM_INIT_DIALOG;
+    pmsg->dest_win_handle = (vwm_win_handle_t)thiswnd;
+    pmsg->src_win_handle = (vwm_win_handle_t)thiswnd;
+
+    msgexec_put_message(pmsg);
+
+    return (vwm_win_handle_t)thiswnd;
 }
 
 /**
@@ -130,55 +127,51 @@ void vwm_clear_wnd_timer(vwm_win_handle_t hwnd);
 
 void msgexec_free_module(vwm_win_handle_t hwin)
 {
-	vwindow_t *thiswnd;
-	thiswnd = (vwindow_t *)hwin;
+    vwindow_t *thiswnd;
+    thiswnd = (vwindow_t *)hwin;
 
-	if (hwin == NULL)
-		return;
+    if (hwin == NULL)
+        return;
 
-	if (g_msg_exec.top_window == thiswnd || g_msg_exec.bottom_window == thiswnd) {
-		if (g_msg_exec.top_window == thiswnd) {
-			g_msg_exec.top_window =  thiswnd->preWnd;
-			if (thiswnd->preWnd != NULL)
-				thiswnd->preWnd->nextWnd = NULL;
-		}
+    if (g_msg_exec.top_window == thiswnd || g_msg_exec.bottom_window == thiswnd) {
+        if (g_msg_exec.top_window == thiswnd) {
+            g_msg_exec.top_window = thiswnd->preWnd;
+            if (thiswnd->preWnd != NULL)
+                thiswnd->preWnd->nextWnd = NULL;
+        }
 
-		if (g_msg_exec.bottom_window == thiswnd) {
-			g_msg_exec.bottom_window = thiswnd->nextWnd;
-			if (thiswnd->nextWnd != NULL)
-				thiswnd->nextWnd->preWnd = NULL;
-		}
-	}
-	else {
-		if (thiswnd->preWnd != NULL)
-			thiswnd->preWnd->nextWnd = thiswnd->nextWnd;
-		if (thiswnd->nextWnd != NULL)
-			thiswnd->nextWnd->preWnd = thiswnd->preWnd;
-	}
+        if (g_msg_exec.bottom_window == thiswnd) {
+            g_msg_exec.bottom_window = thiswnd->nextWnd;
+            if (thiswnd->nextWnd != NULL)
+                thiswnd->nextWnd->preWnd = NULL;
+        }
+    } else {
+        if (thiswnd->preWnd != NULL)
+            thiswnd->preWnd->nextWnd = thiswnd->nextWnd;
+        if (thiswnd->nextWnd != NULL)
+            thiswnd->nextWnd->preWnd = thiswnd->preWnd;
+    }
 
-	
-	//释放此窗口关联的定时器
-	vwm_clear_wnd_timer(hwin);
-	dm_free(thiswnd);
+    //释放此窗口关联的定时器
+    vwm_clear_wnd_timer(hwin);
+    dm_free(thiswnd);
 }
-
 
 /**
 * @brief 让消息处理器分配一个消息对象
 * @return 正常返回分配好的消息对象指针，否则返回NULL
 */
 
-vwm_message_t * msgexec_alloc_message(void)
+vwm_message_t *msgexec_alloc_message(void)
 {
-	return osMailCAlloc(msgexec_queue_id, 0);       // Allocate memory
+    return osMailCAlloc(msgexec_queue_id, 0); // Allocate memory
 }
 
 void msgexec_put_message(vwm_message_t *msg)
 {
-	if (msg != NULL)
-		osMailPut(msgexec_queue_id, msg);                         // Send Mail
+    if (msg != NULL)
+        osMailPut(msgexec_queue_id, msg); // Send Mail
 }
-
 
 /**
 * @brief 返回顶层模块句柄
@@ -187,91 +180,89 @@ void msgexec_put_message(vwm_message_t *msg)
 
 vwm_win_handle_t msgexec_get_topwindow()
 {
-	return (vwm_win_handle_t)g_msg_exec.top_window;
+    return (vwm_win_handle_t)g_msg_exec.top_window;
 }
 
-void vwm_default_proc(vwm_message_t * pMsg)
+void vwm_default_proc(vwm_message_t *pMsg)
 {
 }
 
 void vwm_send_message_no_para(int msg_id, vwm_win_handle_t hdestwin, vwm_win_handle_t hsrcwin)
 {
-	vwm_message_t *pmsg;
-	//发送初始化消息
-	pmsg = msgexec_alloc_message();
-	if (pmsg == NULL) {
-		return;
-	}
-	pmsg->msg_id = msg_id;
-	pmsg->dest_win_handle = (vwm_win_handle_t)hdestwin;
-	pmsg->src_win_handle = (vwm_win_handle_t)hsrcwin;
-	pmsg->data.v = 0;
-	pmsg->auto_free_p = 0;
+    vwm_message_t *pmsg;
+    //发送初始化消息
+    pmsg = msgexec_alloc_message();
+    if (pmsg == NULL) {
+        return;
+    }
+    pmsg->msg_id = msg_id;
+    pmsg->dest_win_handle = (vwm_win_handle_t)hdestwin;
+    pmsg->src_win_handle = (vwm_win_handle_t)hsrcwin;
+    pmsg->data.v = 0;
+    pmsg->auto_free_p = 0;
 
-	msgexec_put_message(pmsg);
-} 
+    msgexec_put_message(pmsg);
+}
 
 void vwm_send_message(int msg_id, vwm_win_handle_t hdestwin, vwm_win_handle_t hsrcwin, int data, uint8_t auto_free_p)
 {
-	vwm_message_t *pmsg;
-	pmsg = msgexec_alloc_message();
-	if (pmsg == NULL) {
-		return;
-	}		
-	pmsg->msg_id = msg_id;
-	pmsg->dest_win_handle = hdestwin;
-	pmsg->src_win_handle = hsrcwin;		
-	pmsg->auto_free_p = auto_free_p;//自动释放
-	pmsg->data.v = data;
-	msgexec_put_message(pmsg);
+    vwm_message_t *pmsg;
+    pmsg = msgexec_alloc_message();
+    if (pmsg == NULL) {
+        return;
+    }
+    pmsg->msg_id = msg_id;
+    pmsg->dest_win_handle = hdestwin;
+    pmsg->src_win_handle = hsrcwin;
+    pmsg->auto_free_p = auto_free_p; //自动释放
+    pmsg->data.v = data;
+    msgexec_put_message(pmsg);
 }
-void vwm_send_message_p(int msg_id, vwm_win_handle_t hdestwin, vwm_win_handle_t hsrcwin, void* data, uint8_t auto_free_p)
+void vwm_send_message_p(int msg_id, vwm_win_handle_t hdestwin, vwm_win_handle_t hsrcwin, void *data, uint8_t auto_free_p)
 {
-	vwm_message_t *pmsg;
-	pmsg = msgexec_alloc_message();
-	if (pmsg == NULL) {
-		return;
-	}		
-	pmsg->msg_id = msg_id;
-	pmsg->dest_win_handle = hdestwin;
-	pmsg->src_win_handle = hsrcwin;		
-	pmsg->auto_free_p = auto_free_p;//自动释放
-	pmsg->data.p = data;
-	msgexec_put_message(pmsg);
+    vwm_message_t *pmsg;
+    pmsg = msgexec_alloc_message();
+    if (pmsg == NULL) {
+        return;
+    }
+    pmsg->msg_id = msg_id;
+    pmsg->dest_win_handle = hdestwin;
+    pmsg->src_win_handle = hsrcwin;
+    pmsg->auto_free_p = auto_free_p; //自动释放
+    pmsg->data.p = data;
+    msgexec_put_message(pmsg);
 }
 
 vtimer_t gVTimer;
 
-
 uint8_t vwm_timer_init(void)
 {
-	memset(&gVTimer, 0, sizeof(vtimer_t));
-	return 0;
+    memset(&gVTimer, 0, sizeof(vtimer_t));
+    return 0;
 }
 
-void ostimer_callback(void const *arg)                   // prototypes for timer callback function
+void ostimer_callback(void const *arg) // prototypes for timer callback function
 {
-	vtimer_item_t *thistimer = (vtimer_item_t *)arg;
-	vwm_message_t *pmsg;
+    vtimer_item_t *thistimer = (vtimer_item_t *)arg;
+    vwm_message_t *pmsg;
 
-	if (arg == NULL)
-		return;
+    if (arg == NULL)
+        return;
 
-	if (thistimer->windowHandle != NULL) {
-		//发送定时器消息给对应的模块
-		pmsg = msgexec_alloc_message();
-		if (pmsg == NULL) {
-			return;
-		}
-		pmsg->msg_id = VWM_TIMER;
-		pmsg->dest_win_handle = (vwm_win_handle_t)thistimer->windowHandle;
-		pmsg->src_win_handle = (vwm_win_handle_t)thistimer->windowHandle;
-		pmsg->data.p = thistimer;
+    if (thistimer->windowHandle != NULL) {
+        //发送定时器消息给对应的模块
+        pmsg = msgexec_alloc_message();
+        if (pmsg == NULL) {
+            return;
+        }
+        pmsg->msg_id = VWM_TIMER;
+        pmsg->dest_win_handle = (vwm_win_handle_t)thistimer->windowHandle;
+        pmsg->src_win_handle = (vwm_win_handle_t)thistimer->windowHandle;
+        pmsg->data.p = thistimer;
 
-		msgexec_put_message(pmsg);
-	}
+        msgexec_put_message(pmsg);
+    }
 }
-
 
 osTimerDef(vostimer, ostimer_callback);
 
@@ -283,156 +274,152 @@ osTimerDef(vostimer, ostimer_callback);
 
 vwm_timer_handle_t vwm_create_timer(vwm_win_handle_t dest_win_handle, int UserId, uint32_t Period, int Mode)
 {
-	vtimer_item_t *thistimer = (vtimer_item_t *)dm_alloc(sizeof(vtimer_item_t));
+    vtimer_item_t *thistimer = (vtimer_item_t *)dm_alloc(sizeof(vtimer_item_t));
 
-	if (thistimer == NULL)
-		return NULL;
-	memset(thistimer, 0, sizeof(vtimer_item_t));
-	
-	thistimer->userData = UserId;
-	thistimer->mode = Mode;
-	thistimer->period = Period;
-	thistimer->windowHandle = dest_win_handle;
-	thistimer->osTimerDef.ptimer = ostimer_callback;
-	// thistimer->osTimerDef.timer = thistimer->os_timer_cb_internel;
-//	if (Mode == 0)
-//		thistimer->osTimerID = osTimerCreate (osTimer(vostimer), osTimerOnce, thistimer);
-//	else if (Mode == 1)
-//		thistimer->osTimerID = osTimerCreate (osTimer(vostimer), osTimerPeriodic, thistimer);
-	if (Mode == 0)
-		thistimer->osTimerID = osTimerCreate (&thistimer->osTimerDef, osTimerOnce, thistimer);
-	else if (Mode == 1)
-		thistimer->osTimerID = osTimerCreate (&thistimer->osTimerDef, osTimerPeriodic, thistimer);
-	
-	if (gVTimer.lastTimer == NULL) {
-		gVTimer.lastTimer = thistimer;
-		gVTimer.firstTimer = thistimer;
-		thistimer->nextTimer = NULL;
-		thistimer->preTimer = NULL;
-	}
-	else {
-		gVTimer.lastTimer->nextTimer =  thistimer;
-		thistimer->preTimer = gVTimer.lastTimer;
-		gVTimer.lastTimer = thistimer;
-		thistimer->nextTimer = NULL;
-	}
+    if (thistimer == NULL)
+        return NULL;
+    memset(thistimer, 0, sizeof(vtimer_item_t));
 
-	return (vwm_win_handle_t)thistimer;
+    thistimer->userData = UserId;
+    thistimer->mode = Mode;
+    thistimer->period = Period;
+    thistimer->windowHandle = dest_win_handle;
+    thistimer->osTimerDef.ptimer = ostimer_callback;
+    // thistimer->osTimerDef.timer = thistimer->os_timer_cb_internel;
+    //	if (Mode == 0)
+    //		thistimer->osTimerID = osTimerCreate (osTimer(vostimer), osTimerOnce, thistimer);
+    //	else if (Mode == 1)
+    //		thistimer->osTimerID = osTimerCreate (osTimer(vostimer), osTimerPeriodic, thistimer);
+    if (Mode == 0)
+        thistimer->osTimerID = osTimerCreate(&thistimer->osTimerDef, osTimerOnce, thistimer);
+    else if (Mode == 1)
+        thistimer->osTimerID = osTimerCreate(&thistimer->osTimerDef, osTimerPeriodic, thistimer);
+
+    if (gVTimer.lastTimer == NULL) {
+        gVTimer.lastTimer = thistimer;
+        gVTimer.firstTimer = thistimer;
+        thistimer->nextTimer = NULL;
+        thistimer->preTimer = NULL;
+    } else {
+        gVTimer.lastTimer->nextTimer = thistimer;
+        thistimer->preTimer = gVTimer.lastTimer;
+        gVTimer.lastTimer = thistimer;
+        thistimer->nextTimer = NULL;
+    }
+
+    return (vwm_win_handle_t)thistimer;
 }
 
 void vwm_delete_timer(vwm_timer_handle_t hTimer)
 {
-	vtimer_item_t *thistimer;
-	thistimer = (vtimer_item_t *)hTimer;
+    vtimer_item_t *thistimer;
+    thistimer = (vtimer_item_t *)hTimer;
 
-	if (thistimer == NULL)
-		return;
+    if (thistimer == NULL)
+        return;
 
-	osTimerDelete(thistimer->osTimerID);
-	
-	if (gVTimer.lastTimer == thistimer || gVTimer.firstTimer == thistimer) {
-		if (gVTimer.lastTimer == thistimer) {
-			gVTimer.lastTimer =  thistimer->preTimer;
-			if (thistimer->preTimer != NULL)
-				thistimer->preTimer->nextTimer = NULL;
-		}
+    osTimerDelete(thistimer->osTimerID);
 
-		if (gVTimer.firstTimer == thistimer) {
-			gVTimer.firstTimer = thistimer->nextTimer;
-			if (thistimer->nextTimer != NULL)
-				thistimer->nextTimer->preTimer = NULL;
-		}
-	}
-	else {
-		if (thistimer->preTimer != NULL)
-			thistimer->preTimer->nextTimer = thistimer->nextTimer;
-		if (thistimer->nextTimer != NULL)
-			thistimer->nextTimer->preTimer = thistimer->preTimer;
-	}
+    if (gVTimer.lastTimer == thistimer || gVTimer.firstTimer == thistimer) {
+        if (gVTimer.lastTimer == thistimer) {
+            gVTimer.lastTimer = thistimer->preTimer;
+            if (thistimer->preTimer != NULL)
+                thistimer->preTimer->nextTimer = NULL;
+        }
 
-	dm_free(thistimer);	
+        if (gVTimer.firstTimer == thistimer) {
+            gVTimer.firstTimer = thistimer->nextTimer;
+            if (thistimer->nextTimer != NULL)
+                thistimer->nextTimer->preTimer = NULL;
+        }
+    } else {
+        if (thistimer->preTimer != NULL)
+            thistimer->preTimer->nextTimer = thistimer->nextTimer;
+        if (thistimer->nextTimer != NULL)
+            thistimer->nextTimer->preTimer = thistimer->preTimer;
+    }
+
+    dm_free(thistimer);
 }
 
 void vwm_restart_timer(vwm_timer_handle_t hTimer, int Period)
 {
-	vtimer_item_t *thistimer;
-	thistimer = (vtimer_item_t *)hTimer;
-	
-	if (thistimer == NULL)
-		return;
+    vtimer_item_t *thistimer;
+    thistimer = (vtimer_item_t *)hTimer;
 
-	osTimerStart(thistimer->osTimerID, Period);
+    if (thistimer == NULL)
+        return;
+
+    osTimerStart(thistimer->osTimerID, Period);
 }
 
 void vmw_stop_timer(vwm_timer_handle_t hTimer)
 {
-	vtimer_item_t *thistimer;
-	thistimer = (vtimer_item_t *)hTimer;
-	
-	if (thistimer == NULL)
-		return;
+    vtimer_item_t *thistimer;
+    thistimer = (vtimer_item_t *)hTimer;
 
-	osTimerStop(thistimer->osTimerID);
+    if (thistimer == NULL)
+        return;
+
+    osTimerStop(thistimer->osTimerID);
 }
 
 void vwm_start_timer(vwm_timer_handle_t hTimer)
 {
-	vtimer_item_t *thistimer;
-	thistimer = (vtimer_item_t *)hTimer;
-	
-	if (thistimer == NULL)
-		return;
+    vtimer_item_t *thistimer;
+    thistimer = (vtimer_item_t *)hTimer;
 
-	osTimerStart(thistimer->osTimerID, thistimer->period);
+    if (thistimer == NULL)
+        return;
+
+    osTimerStart(thistimer->osTimerID, thistimer->period);
 }
 
-vtimer_item_t * vwm_find_timer_by_wnd(vwm_win_handle_t hwnd)
+vtimer_item_t *vwm_find_timer_by_wnd(vwm_win_handle_t hwnd)
 {
-	vtimer_item_t * nowitem;
+    vtimer_item_t *nowitem;
 
-	nowitem = gVTimer.firstTimer;
+    nowitem = gVTimer.firstTimer;
 
-	while (nowitem != NULL) {
-		if (nowitem->windowHandle == hwnd)
-			return nowitem;
-		else
-			nowitem = nowitem->nextTimer;
-	}
-	
-	return nowitem;
+    while (nowitem != NULL) {
+        if (nowitem->windowHandle == hwnd)
+            return nowitem;
+        else
+            nowitem = nowitem->nextTimer;
+    }
+
+    return nowitem;
 }
 
 void vwm_clear_wnd_timer(vwm_win_handle_t hwnd)
 {
-	vtimer_item_t * nowitem;
+    vtimer_item_t *nowitem;
 
-	nowitem = vwm_find_timer_by_wnd(hwnd);
+    nowitem = vwm_find_timer_by_wnd(hwnd);
 
-	while (nowitem != NULL) {
-		vwm_delete_timer((vwm_timer_handle_t)nowitem);
-		nowitem = vwm_find_timer_by_wnd(hwnd);
-	}
+    while (nowitem != NULL) {
+        vwm_delete_timer((vwm_timer_handle_t)nowitem);
+        nowitem = vwm_find_timer_by_wnd(hwnd);
+    }
 }
-
 
 //----------------------------------------------------
-void vgui_send_key_msg (int Key, int Pressed)
+void vgui_send_key_msg(int Key, int Pressed)
 {
-	vwm_message_t *pmsg;
+    vwm_message_t *pmsg;
 
-	VWM_KEY_INFO * keyinfo = (VWM_KEY_INFO *)dm_alloc(sizeof(VWM_KEY_INFO));
-	keyinfo->Key = Key;
-	keyinfo->PressedCnt = Pressed;
+    VWM_KEY_INFO *keyinfo = (VWM_KEY_INFO *)dm_alloc(sizeof(VWM_KEY_INFO));
+    keyinfo->Key = Key;
+    keyinfo->PressedCnt = Pressed;
 
-	pmsg = msgexec_alloc_message();
-	if (pmsg == NULL) {
-		return;
-	}
-	pmsg->msg_id = VWM_KEY;
-	pmsg->dest_win_handle = msgexec_get_topwindow();
-	pmsg->src_win_handle = pmsg->dest_win_handle;
-	pmsg->data.p = keyinfo;
+    pmsg = msgexec_alloc_message();
+    if (pmsg == NULL) {
+        return;
+    }
+    pmsg->msg_id = VWM_KEY;
+    pmsg->dest_win_handle = msgexec_get_topwindow();
+    pmsg->src_win_handle = pmsg->dest_win_handle;
+    pmsg->data.p = keyinfo;
 
-	msgexec_put_message(pmsg);
+    msgexec_put_message(pmsg);
 }
-
