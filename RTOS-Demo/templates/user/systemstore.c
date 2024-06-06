@@ -1,10 +1,7 @@
 #include "systemstore.h"
 #include <string.h>
 
-
-
 systemstore_t g_systemstore;
-
 
 /**
   * @brief  Program halfword, word or double word at a specified address
@@ -26,43 +23,37 @@ systemstore_t g_systemstore;
   */
 HAL_StatusTypeDef HAL_FLASH_Program32(uint32_t Address, uint32_t Data)
 {
-  HAL_StatusTypeDef status = HAL_ERROR;
-  uint8_t index = 0U;
-  uint8_t nbiterations = 0U;
-  
+    HAL_StatusTypeDef status = HAL_ERROR;
+    uint8_t index = 0U;
+    uint8_t nbiterations = 0U;
 
-  /* Check the parameters */
-  assert_param(IS_FLASH_TYPEPROGRAM(TypeProgram));
-  assert_param(IS_FLASH_PROGRAM_ADDRESS(Address));
+    /* Check the parameters */
+    assert_param(IS_FLASH_TYPEPROGRAM(TypeProgram));
+    assert_param(IS_FLASH_PROGRAM_ADDRESS(Address));
 
-	/* Wait for last operation to be completed */
-	status = FLASH_WaitForLastOperation(FLASH_TIMEOUT_VALUE);
-  
-  if(status == HAL_OK)
-  {			
-			/* Proceed to program the new data */
-			SET_BIT(FLASH->CR, FLASH_CR_PG);
+    /* Wait for last operation to be completed */
+    status = FLASH_WaitForLastOperation(FLASH_TIMEOUT_VALUE);
 
-		/* Write data in the address */
-		*(__IO uint32_t*)Address = Data;
+    if (status == HAL_OK) {
+        /* Proceed to program the new data */
+        SET_BIT(FLASH->CR, FLASH_CR_PG);
 
-			/* Wait for last operation to be completed */
-			status = FLASH_WaitForLastOperation(FLASH_TIMEOUT_VALUE);
-	
-			/* If the program operation is completed, disable the PG Bit */
-			CLEAR_BIT(FLASH->CR, FLASH_CR_PG);
-		/* In case of error, stop programming procedure */
-		if (status != HAL_OK)
-		{
-			return status;
-		}
-    
-  }
+        /* Write data in the address */
+        *(__IO uint32_t *)Address = Data;
 
-  return status;
+        /* Wait for last operation to be completed */
+        status = FLASH_WaitForLastOperation(FLASH_TIMEOUT_VALUE);
+
+        /* If the program operation is completed, disable the PG Bit */
+        CLEAR_BIT(FLASH->CR, FLASH_CR_PG);
+        /* In case of error, stop programming procedure */
+        if (status != HAL_OK) {
+            return status;
+        }
+    }
+
+    return status;
 }
-
-
 
 /**
  * @brief 将系统配置保存到Flash
@@ -71,27 +62,30 @@ HAL_StatusTypeDef HAL_FLASH_Program32(uint32_t Address, uint32_t Data)
 #if 1
 void systemstore__save()
 {
-	uint32_t PageError = 0;           //设置PageError,如果出现错误这个变量会被设置为出错的FLASH地址
-	uint8_t i;
-	uint32_t *pu32;
+    uint32_t PageError = 0; //设置PageError,如果出现错误这个变量会被设置为出错的FLASH地址
+    uint8_t i;
+    uint32_t *pu32;
 
-	FLASH_EraseInitTypeDef My_Flash;  //声明 FLASH_EraseInitTypeDef 结构体为 My_Flash
-	HAL_FLASH_Unlock();               //解锁Flash
+    FLASH_EraseInitTypeDef My_Flash; //声明 FLASH_EraseInitTypeDef 结构体为 My_Flash
+    HAL_FLASH_Unlock();              //解锁Flash
 
-	My_Flash.TypeErase = FLASH_TYPEERASE_PAGES; //标明Flash执行页面只做擦除操作
-	My_Flash.PageAddress = DATASTORE_BASEADDR;  //声明要擦除的地址
-	My_Flash.NbPages = 1;                       //说明要擦除的页数，此参数必须是Min_Data = 1和Max_Data =(最大页数-初始页的值)之间的值
-	HAL_FLASHEx_Erase(&My_Flash, &PageError);   //调用擦除函数擦除
-//	HAL_FLASH_Lock(); //锁住Flash
+    My_Flash.TypeErase = FLASH_TYPEERASE_PAGES; //标明Flash执行页面只做擦除操作
+    My_Flash.PageAddress = DATASTORE_BASEADDR;  //声明要擦除的地址
+    My_Flash.NbPages = 1; //说明要擦除的页数，此参数必须是Min_Data = 1和Max_Data =(最大页数-初始页的值)之间的值
+    HAL_FLASHEx_Erase(&My_Flash, &PageError); //调用擦除函数擦除
+                                              //	HAL_FLASH_Lock(); //锁住Flash
 
-	pu32 = (uint32_t *)&g_systemstore;
-//	HAL_FLASH_Unlock();               //解锁Flash
+    pu32 = (uint32_t *)&g_systemstore;
+    //	HAL_FLASH_Unlock();               //解锁Flash
 
-	for (i=0; i<sizeof(systemstore_t)/4; i++) { //The sizeof systemstore is guaranteed as a multiple of 4, so directly divided by 4
-		HAL_FLASH_Program32(DATASTORE_BASEADDR + i*4, pu32[i]); //对Flash进行烧写，FLASH_TYPEPROGRAM_HALFWORD 声明操作的Flash地址的16位的，此外还有32位跟64位的操作，自行翻查HAL库的定义即可
-	}
+    for (i = 0; i < sizeof(systemstore_t) / 4;
+         i++) { //The sizeof systemstore is guaranteed as a multiple of 4, so directly divided by 4
+        HAL_FLASH_Program32(
+            DATASTORE_BASEADDR + i * 4,
+            pu32[i]); //对Flash进行烧写，FLASH_TYPEPROGRAM_HALFWORD 声明操作的Flash地址的16位的，此外还有32位跟64位的操作，自行翻查HAL库的定义即可
+    }
 
-	HAL_FLASH_Lock(); //锁住Flash
+    HAL_FLASH_Lock(); //锁住Flash
 }
 #endif
 #if 0
@@ -118,12 +112,10 @@ void systemstore__save()
 */
 static uint8_t systemstore__is_init()
 {
-	if (g_systemstore.continuous_speed== 0xFFFF ||
-	    g_systemstore.manual_forward_speed == 0xFFFF) {
-		return 0;
-	}
-	else
-		return 1;
+    if (g_systemstore.continuous_speed == 0xFFFF || g_systemstore.manual_forward_speed == 0xFFFF) {
+        return 0;
+    } else
+        return 1;
 }
 
 /*!
@@ -131,23 +123,19 @@ static uint8_t systemstore__is_init()
 */
 void systemstore_load_default_config()
 {
+    memset(&g_systemstore, 0, sizeof(systemstore_t));
 
-	memset(&g_systemstore, 0, sizeof(systemstore_t));
+    g_systemstore.continuous_speed = 300;   //连续模式速度
+    g_systemstore.wire_back_length = 99;    //回抽长度
+    g_systemstore.wire_forward_length = 99; //补丝长度
 
+    g_systemstore.pulse_speed = 99;      //脉冲模式速度
+    g_systemstore.pulse_period = 100;    //脉冲周期
+    g_systemstore.pulse_smoothness = 25; //脉冲平滑度
 
-	g_systemstore.continuous_speed = 300;			//连续模式速度
-	g_systemstore.wire_back_length = 99;       		//回抽长度
-	g_systemstore.wire_forward_length = 99;    		//补丝长度	
+    g_systemstore.manual_back_speed = 600; //手动回抽速度
 
-	g_systemstore.pulse_speed = 99;					//脉冲模式速度
-	g_systemstore.pulse_period = 100; 				//脉冲周期
-	g_systemstore.pulse_smoothness = 25; 			//脉冲平滑度
-
-	g_systemstore.manual_back_speed = 600; 			//手动回抽速度
-
-	g_systemstore.manual_forward_speed = 600;  		//手动送丝速度`
-
-
+    g_systemstore.manual_forward_speed = 600; //手动送丝速度`
 }
 
 /**
@@ -156,15 +144,12 @@ void systemstore_load_default_config()
  */
 void systemstore__load()
 {
-	uint32_t *pu32;
+    uint32_t *pu32;
 
-	g_systemstore = *((systemstore_t*)DATASTORE_BASEADDR);
+    g_systemstore = *((systemstore_t *)DATASTORE_BASEADDR);
 
-	if (systemstore__is_init() == 0) {
-		//如果4个密码都是FF，说明配置为空，装入缺省配置
-		systemstore_load_default_config();
-	}
-
+    if (systemstore__is_init() == 0) {
+        //如果4个密码都是FF，说明配置为空，装入缺省配置
+        systemstore_load_default_config();
+    }
 }
-
-
