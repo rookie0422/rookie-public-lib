@@ -154,12 +154,12 @@ void NOTIFYHandShake()
 */
 void ProcessMessage(PCTRL_MSG msg, uint16 size)
 {
-    uint8 cmd_type = msg->cmd_type;                //指令类型
-    uint8 ctrl_msg = msg->ctrl_msg;                //消息的类型
-    uint8 control_type = msg->control_type;        //控件类型
-    uint16 screen_id = PTR2U16(&msg->screen_id);   //画面ID
-    uint16 control_id = PTR2U16(&msg->control_id); //控件ID
-    uint32 value = PTR2U32(msg->param);            //数值
+    uint8 cmd_type     = msg->cmd_type;             //指令类型
+    uint8 ctrl_msg     = msg->ctrl_msg;             //消息的类型
+    uint8 control_type = msg->control_type;         //控件类型
+    uint16 screen_id   = PTR2U16(&msg->screen_id);  //画面ID
+    uint16 control_id  = PTR2U16(&msg->control_id); //控件ID
+    uint32 value       = PTR2U32(msg->param);       //数值
 
     switch (cmd_type) {
         case NOTIFY_TOUCH_PRESS:   //触摸屏按下
