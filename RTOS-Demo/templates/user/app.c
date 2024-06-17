@@ -183,8 +183,8 @@ void ProcessMessage(PCTRL_MSG msg, uint16 size)
             break;
         case NOTIFY_CONTROL:
         {
-            if (ctrl_msg == MSG_GET_CURRENT_SCREEN) //画面ID变化通知
-            {
+            //画面ID变化通知
+            if (ctrl_msg == MSG_GET_CURRENT_SCREEN) {
                 //NotifyScreen(screen_id);                                            //画面切换调动的函数
             } else {
                 switch (control_type) {
@@ -235,11 +235,12 @@ void app_uart_handle_effective_frame_callback(void *revobj, uint8_t *revbuff, ui
 
         size = queue_find_cmd(g_app.lcd_cmd_buffer, CMD_MAX_SIZE); //从缓冲区中获取一条指令
 
-        if (size > 0 && g_app.lcd_cmd_buffer[1] != 0x07) //接收到指令 ，及判断是否为开机提示
-        {
+        //接收到指令 ，及判断是否为开机提示
+        if (size > 0 && g_app.lcd_cmd_buffer[1] != 0x07) {
             ProcessMessage((PCTRL_MSG)g_app.lcd_cmd_buffer, size); //指令处理
-        } else if (size > 0 && g_app.lcd_cmd_buffer[1] == 0x07)    //如果为指令0x07就软重置STM32
-        {
+
+            //如果为指令0x07就软重置STM32
+        } else if (size > 0 && g_app.lcd_cmd_buffer[1] == 0x07) {
             __disable_fault_irq();
             NVIC_SystemReset();
         }

@@ -30,9 +30,9 @@ void DHT11_IO_OUT(void) //IO口状态切换为输出
 
     HAL_GPIO_WritePin(DHT11_IO_GPIO_Port, DHT11_IO_Pin, GPIO_PIN_RESET);
 
-    GPIO_InitStruct.Pin = DHT11_IO_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Pin   = DHT11_IO_Pin;
+    GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull  = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(DHT11_IO_GPIO_Port, &GPIO_InitStruct);
 }
@@ -41,7 +41,7 @@ void DHT11_IO_IN(void) //IO口状态切换为输入
 {
     GPIO_InitTypeDef GPIO_InitStruct = { 0 };
 
-    GPIO_InitStruct.Pin = DHT11_IO_Pin;
+    GPIO_InitStruct.Pin  = DHT11_IO_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     HAL_GPIO_Init(DHT11_IO_GPIO_Port, &GPIO_InitStruct);
