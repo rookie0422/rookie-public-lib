@@ -285,7 +285,7 @@ vwm_timer_handle_t vwm_create_timer(vwm_win_handle_t dest_win_handle, int UserId
     thistimer->period = Period;
     thistimer->windowHandle = dest_win_handle;
     thistimer->osTimerDef.ptimer = ostimer_callback;
-    // thistimer->osTimerDef.timer = thistimer->os_timer_cb_internel;
+    thistimer->osTimerDef.timer = thistimer->os_timer_cb_internel;
     //	if (Mode == 0)
     //		thistimer->osTimerID = osTimerCreate (osTimer(vostimer), osTimerOnce, thistimer);
     //	else if (Mode == 1)
