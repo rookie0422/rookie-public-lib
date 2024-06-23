@@ -1,9 +1,0 @@
-wifi_demo1\vmsgexec.o: ..\src\vmsgexec.c
-wifi_demo1\vmsgexec.o: D:\Keilv5\ARM\ARMCC\Bin\..\include\stdlib.h
-wifi_demo1\vmsgexec.o: D:\Keilv5\ARM\ARMCC\Bin\..\include\string.h
-wifi_demo1\vmsgexec.o: D:\Keilv5\ARM\ARMCC\Bin\..\include\stdint.h
-wifi_demo1\vmsgexec.o: ../src/mem/dyn_mem.h
-wifi_demo1\vmsgexec.o: ../src/mem/tlsf.h
-wifi_demo1\vmsgexec.o: D:\Keilv5\ARM\ARMCC\Bin\..\include\stddef.h
-wifi_demo1\vmsgexec.o: ..\src\vmsgexec.h
-wifi_demo1\vmsgexec.o: D:\Users\frj\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\RTOS\RTX\INC\cmsis_os.h

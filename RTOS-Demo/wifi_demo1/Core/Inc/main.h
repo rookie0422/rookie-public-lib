@@ -69,6 +69,10 @@ void Error_Handler(void);
 #define DHT11_IO_GPIO_Port GPIOC
 #define LED_R_Pin GPIO_PIN_5
 #define LED_R_GPIO_Port GPIOB
+#define ESP8266_CH_PD_Pin GPIO_PIN_8
+#define ESP8266_CH_PD_GPIO_Port GPIOB
+#define ESP8266_RST_Pin GPIO_PIN_9
+#define ESP8266_RST_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

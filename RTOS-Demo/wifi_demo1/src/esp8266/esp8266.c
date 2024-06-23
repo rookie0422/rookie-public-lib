@@ -1,295 +1,162 @@
-/**
-	************************************************************
-	************************************************************
-	************************************************************
-	*	文件名： 	esp8266.c
-	*
-	*	作者： 		张继瑞
-	*
-	*	日期： 		2017-05-08
-	*
-	*	版本： 		V1.0
-	*
-	*	说明： 		ESP8266的简单驱动
-	*
-	*	修改记录：	
-	************************************************************
-	************************************************************
-	************************************************************
-**/
-
-//单片机头文件
-//#include "stm32f10x.h"
-
-//网络设备驱动
 #include "esp8266.h"
-
-//硬件驱动
-//#include "delay.h"
-//#include "usart.h"
-
 #include "bsp.h"
-
-
-//C库
 #include <string.h>
 #include <stdio.h>
+#include "uart_interface.h"
 
+#include "elog.h"
+#define LOG_TAG "WiFi"
 
-#define ESP8266_WIFI_INFO		"AT+CWJAP=\"iot431\",\"iot@@431\"\r\n"
+UART_HandleTypeDef *esp_usart;
 
-#define ESP8266_ONENET_INFO		"AT+CIPSTART=\"TCP\",\"183.230.40.39\",6002\r\n"
-
-
-unsigned char esp8266_buf[128];
+char esp8266_buf[128];
 unsigned short esp8266_cnt = 0, esp8266_cntPre = 0;
 
-void Usart_SendString(UART_HandleTypeDef *huart, unsigned char *str, unsigned short len)
+void usart_send_string(UART_HandleTypeDef *huart, unsigned char *str, unsigned short len)
 {
+    unsigned short count = 0;
 
-	unsigned short count = 0;
-	
-	HAL_UART_Transmit(huart,(uint8_t *)str,len,0xffff);
-	while(HAL_UART_GetState(huart) == HAL_UART_STATE_BUSY_TX);
-
+    HAL_UART_Transmit(huart, (uint8_t *)str, len, 0xffff);
+    while (HAL_UART_GetState(huart) == HAL_UART_STATE_BUSY_TX)
+        ;
 }
 
-//==========================================================
-//	函数名称：	ESP8266_Clear
-//
-//	函数功能：	清空缓存
-//
-//	入口参数：	无
-//
-//	返回参数：	无
-//
-//	说明：		
-//==========================================================
-void ESP8266_Clear(void)
+void esp8266_clear(void)
 {
-
-	memset(esp8266_buf, 0, sizeof(esp8266_buf));
-	esp8266_cnt = 0;
-
+    memset(esp8266_buf, 0, sizeof(esp8266_buf));
+    esp8266_cnt = 0;
 }
 
-//==========================================================
-//	函数名称：	ESP8266_WaitRecive
-//
-//	函数功能：	等待接收完成
-//
-//	入口参数：	无
-//
-//	返回参数：	REV_OK-接收完成		REV_WAIT-接收超时未完成
-//
-//	说明：		循环调用检测是否接收完成
-//==========================================================
-_Bool ESP8266_WaitRecive(void)
+uint8_t esp8266_wait_recive(void)
 {
+    if (esp8266_cnt == 0)
+        return REV_WAIT;
 
-	if(esp8266_cnt == 0) 							//如果接收计数为0 则说明没有处于接收数据中，所以直接跳出，结束函数
-		return REV_WAIT;
-		
-	if(esp8266_cnt == esp8266_cntPre)				//如果上一次的值和这次相同，则说明接收完毕
-	{
-		esp8266_cnt = 0;							//清0接收计数
-			
-		return REV_OK;								//返回接收完成标志
-	}
-		
-	esp8266_cntPre = esp8266_cnt;					//置为相同
-	
-	return REV_WAIT;								//返回接收未完成标志
+    if (esp8266_cnt == esp8266_cntPre) {
+        esp8266_cnt = 0;
 
+        return REV_OK;
+    }
+
+    esp8266_cntPre = esp8266_cnt;
+
+    return REV_WAIT;
 }
 
-//==========================================================
-//	函数名称：	ESP8266_SendCmd
-//
-//	函数功能：	发送命令
-//
-//	入口参数：	cmd：命令
-//				res：需要检查的返回指令
-//
-//	返回参数：	0-成功	1-失败
-//
-//	说明：		
-//==========================================================
-_Bool ESP8266_SendCmd(char *cmd, char *res)
+uint8_t esp8266_send_cmd(char *cmd, char *res)
 {
-	
-	unsigned char timeOut = 200;
+    unsigned char timeout = 200;
 
-	Usart_SendString(&huart3, (unsigned char *)cmd, strlen((const char *)cmd));
-	
-	while(timeOut--)
-	{
-		if(ESP8266_WaitRecive() == REV_OK)							//如果收到数据
-		{
-			if(strstr((const char *)esp8266_buf, res) != NULL)		//如果检索到关键词
-			{
-				ESP8266_Clear();									//清空缓存
-				
-				return 0;
-			}
-		}
-		
-		HAL_Delay(10);
-	}
-	
-	return 1;
+    usart_send_string(esp_usart, (unsigned char *)cmd, strlen((const char *)cmd));
 
+    while (timeout--) {
+        if (esp8266_wait_recive() == REV_OK) {
+            log_i("%s\r\n", esp8266_buf);
+
+            if (strstr((const char *)esp8266_buf, res) != NULL) {
+                esp8266_clear();
+
+                return 0;
+            }
+        }
+
+        HAL_Delay(10);
+    }
+
+    return 1;
 }
 
-//==========================================================
-//	函数名称：	ESP8266_SendData
-//
-//	函数功能：	发送数据
-//
-//	入口参数：	data：数据
-//				len：长度
-//
-//	返回参数：	无
-//
-//	说明：		
-//==========================================================
-void ESP8266_SendData(unsigned char *data, unsigned short len)
+void esp8266_send_data(unsigned char *data, unsigned short len)
 {
+    char cmdBuf[32];
 
-	char cmdBuf[32];
-	
-	ESP8266_Clear();								//清空接收缓存
-	sprintf(cmdBuf, "AT+CIPSEND=%d\r\n", len);		//发送命令
-	if(!ESP8266_SendCmd(cmdBuf, ">"))				//收到‘>’时可以发送数据
-	{
-		Usart_SendString(&huart3, data, len);		//发送设备连接请求数据
-	}
-
+    esp8266_clear();
+    sprintf(cmdBuf, "AT+CIPSEND=%d\r\n", len);
+    if (!esp8266_send_cmd(cmdBuf, ">")) {
+        usart_send_string(esp_usart, data, len);
+    }
 }
 
-//==========================================================
-//	函数名称：	ESP8266_GetIPD
-//
-//	函数功能：	获取平台返回的数据
-//
-//	入口参数：	等待的时间(乘以10ms)
-//
-//	返回参数：	平台返回的原始数据
-//
-//	说明：		不同网络设备返回的格式不同，需要去调试
-//				如ESP8266的返回格式为	"+IPD,x:yyy"	x代表数据长度，yyy是数据内容
-//==========================================================
-unsigned char *ESP8266_GetIPD(unsigned short timeOut)
+unsigned char *esp8266_get_ipd(unsigned short timeout)
 {
+    char *ptrIPD = NULL;
 
-	char *ptrIPD = NULL;
-	
-	do
-	{
-		if(ESP8266_WaitRecive() == REV_OK)								//如果接收完成
-		{
-			ptrIPD = strstr((char *)esp8266_buf, "IPD,");				//搜索“IPD”头
-			if(ptrIPD == NULL)											//如果没找到，可能是IPD头的延迟，还是需要等待一会，但不会超过设定的时间
-			{
-				//printf("\"IPD\" not found\r\n");
-			}
-			else
-			{
-				ptrIPD = strchr(ptrIPD, ':');							//找到':'
-				if(ptrIPD != NULL)
-				{
-					ptrIPD++;
-					return (unsigned char *)(ptrIPD);
-				}
-				else
-					return NULL;
-				
-			}
-		}
-		
-		HAL_Delay(5);													//延时等待
-	} while(timeOut--);
-	
-	return NULL;														//超时还未找到，返回空指针
+    do {
+        if (esp8266_wait_recive() == REV_OK) {
+            ptrIPD = strstr((char *)esp8266_buf, "IPD,");
+            if (ptrIPD == NULL) {
+                //printf("\"IPD\" not found\r\n");
+            } else {
+                ptrIPD = strchr(ptrIPD, ':');
+                if (ptrIPD != NULL) {
+                    ptrIPD++;
+                    return (unsigned char *)(ptrIPD);
+                } else
+                    return NULL;
+            }
+        }
 
+        HAL_Delay(5);
+    } while (timeout--);
+
+    return NULL;
 }
 
-//==========================================================
-//	函数名称：	ESP8266_Init
-//
-//	函数功能：	初始化ESP8266
-//
-//	入口参数：	无
-//
-//	返回参数：	无
-//
-//	说明：		
-//==========================================================
-void ESP8266_Init(void)
+void esp8266_init(UART_HandleTypeDef *huart)
 {
-	
-//	GPIO_InitTypeDef GPIO_Initure;
-//	
-//	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+    esp_usart = huart;
 
-//	//ESP8266复位引脚
-//	GPIO_Initure.GPIO_Mode = GPIO_Mode_Out_PP;
-//	GPIO_Initure.GPIO_Pin = GPIO_Pin_5;					//GPIOB5-复位
-//	GPIO_Initure.GPIO_Speed = GPIO_Speed_50MHz;
-//	GPIO_Init(GPIOB, &GPIO_Initure);
-//	
-//	GPIO_WriteBit(GPIOB, GPIO_Pin_5, Bit_RESET);
-//	HAL_Delay(250);
-//	GPIO_WriteBit(GPIOB, GPIO_Pin_5, Bit_SET);
-//	HAL_Delay(500);
+    HAL_UART_Receive_IT(esp_usart, (uint8_t *)&Uart3_RxData, 1);
 
-//    HAL_GPIO_WritePin(ESP_RST_GPIO_Port,ESP_RST_Pin,GPIO_PIN_RESET);
-//    HAL_Delay(250);
-//    HAL_GPIO_WritePin(ESP_RST_GPIO_Port,ESP_RST_Pin,GPIO_PIN_SET);
-//    HAL_Delay(500);
-	
-  ESP8266_Clear();
-  
-	printf("1. AT\r\n");
-	while(ESP8266_SendCmd("AT\r\n", "OK"))
-	HAL_Delay(1000);
-	
-	printf("2. CWMODE\r\n");
-	while(ESP8266_SendCmd("AT+CWMODE=1\r\n", "OK"))
-	HAL_Delay(1000);
-	
-	printf("3. CWJAP\r\n");
-	while(ESP8266_SendCmd(ESP8266_WIFI_INFO, "GOT IP"))
-	HAL_Delay(1000);
-	
-	// printf("4. CIPSTART\r\n");
-	// while(ESP8266_SendCmd(ESP8266_ONENET_INFO, "CONNECT"))
-	// HAL_Delay(1000);
-	
-	printf("5. ESP8266 Init OK\r\n");
+    HAL_GPIO_WritePin(ESP8266_RST_GPIO_Port, ESP8266_RST_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(ESP8266_CH_PD_GPIO_Port, ESP8266_CH_PD_Pin, GPIO_PIN_SET);
 
+    esp8266_clear();
+
+    log_i("test AT...");
+    while (esp8266_send_cmd("AT\r\n", "OK"))
+        ;
+    HAL_Delay(1000);
+
+    log_i("set STA CWMODE...");
+    while (esp8266_send_cmd("AT+CWMODE=1\r\n", "OK"))
+        ;
+    HAL_Delay(1000);
+
+    log_i("get IP CIFSR...");
+    while (esp8266_send_cmd("AT+CIFSR\r\n", "OK"))
+        ;
+    HAL_Delay(1000);
+
+    log_i("reset ESP8266...");
+    while (esp8266_send_cmd("AT+RST\r\n", "OK"))
+        ;
+    HAL_Delay(1000);
+
+    log_i("connect AP CWJAP...");
+    while (esp8266_send_cmd(ESP8266_WIFI_INFO, "OK"))
+        ;
+    HAL_Delay(1000);
+
+    log_i("get IP CIFSR...");
+    while (esp8266_send_cmd("AT+CIFSR\r\n", "OK"))
+        ;
+    HAL_Delay(1000);
+
+    // log_i("get AP info...");
+    // while (esp8266_send_cmd("AT+CWJAP?\r\n", "OK"))
+    //     ;
+    // HAL_Delay(1000);
+
+    // log_i("get STA info...");
+    // while (esp8266_send_cmd("AT+CIPSTA?\r\n", "OK"))
+    //     ;
+    // HAL_Delay(1000);
+
+    // log_i("connect TCP Server CIPSTART...\r\n");
+    // while (esp8266_send_cmd(ESP8266_TCP_INFO, "CONNECT"))
+    //     ;
+    // HAL_Delay(1000);
+
+    log_i("ESP8266 Init OK");
 }
-
-
-
-
-//==========================================================
-//	函数名称：	ESP8266_IRQHandler
-//
-//	函数功能：	串口2收发中断
-//
-//	入口参数：	无
-//
-//	返回参数：	无
-//
-
-//	说明：		
-//==========================================================
-//void ESP8266_IRQHandler(void)
-//{
-//		if(esp8266_cnt >= sizeof(esp8266_buf))
-//    {            
-//       esp8266_cnt = 0; //防止串口被刷爆
-//    }
-//    esp8266_buf[esp8266_cnt++] = USART1->DR;
-//}

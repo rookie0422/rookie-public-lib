@@ -2,6 +2,11 @@
     "files.associations": {
         "main.h": "c",
         "bsp.h": "c",
-        "elog.h": "c"
-    }
+        "elog.h": "c",
+        "cmsis_os.h": "c",
+        "uart_interface.h": "c",
+        "esp8266.h": "c",
+        "stdio.h": "c"
+    },
+    "Codegeex.Chat.LanguagePreference": "中文"
 }

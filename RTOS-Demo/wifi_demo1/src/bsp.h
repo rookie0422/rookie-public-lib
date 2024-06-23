@@ -4,7 +4,6 @@
 #include "stm32f1xx_hal.h"
 #include "main.h"
 #include "cmsis_os.h"
-#include "main.h"
 #include "vmsgexec.h"
 
 #define FIRMWAREVERSIONMAJORMINJOR 0x11
@@ -52,7 +51,7 @@ extern volatile uint32_t 	os_time;
 //void HAL_UART_IDLECallBack(UART_HandleTypeDef *huart);
 uint32_t bsp_getdeviceid(void);
 
-
+extern uint8_t Uart3_RxData;									//接收中断缓冲
 
 
 #if 0

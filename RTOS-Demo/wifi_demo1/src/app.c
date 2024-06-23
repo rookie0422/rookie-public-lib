@@ -4,8 +4,12 @@
 #include "elog.h"
 #include "bsp.h"
 #include "vkey.h"
+#include "esp8266.h"
+#include "uart_interface.h"
 #include "dht11.h"
 #define LOG_TAG "APP"
+
+extern uart_interface_t esp_wifi_usart;
 
 const key_map_t key_map[2] = {
 
@@ -13,18 +17,19 @@ const key_map_t key_map[2] = {
     { KEY2_GPIO_Port, KEY2_Pin, KEY2, 0 }
 };
 
-void app_dlgcallback(vwm_message_t *pmsg);
-
 typedef struct app_t {
     vwm_win_handle_t main_wnd; //主窗口
 
     vwm_timer_handle_t dht_timer;
     vwm_timer_handle_t key_scan_timer;
+    vwm_timer_handle_t wifi_get_ip_timer;
 
     uint8_t temp;
     uint8_t humi;
 
 } app_t;
+
+void app_dlgcallback(vwm_message_t *pmsg);
 
 app_t g_app;
 
@@ -42,6 +47,8 @@ void app_init()
 
     key_scan__init(g_app.main_wnd, key_map, 2, 3);
 
+    esp8266_init(&huart3);
+
     //uart_interface__init(&g_app.lcd_uart, &huart1,0,0,NULL,0);
 
     //uart_interface__start_receive(&g_app.lcd_uart,NULL,app_uart_receive_effective_frame_callback);
@@ -54,18 +61,26 @@ void app_dlgcallback(vwm_message_t *pmsg)
 
             g_app.dht_timer = vwm_create_timer(pmsg->dest_win_handle, 0, 2000, 1);
             if (g_app.dht_timer == NULL) {
-                log_e("app_init VWM_CreateTimer error!");
+                log_e("app_init VWM_CreateTimer dht_timer error!");
             } else {
-                log_i("app_init VWM_CreateTimer ok!");
+                log_i("app_init VWM_CreateTimer dht_timer ok!");
                 vwm_start_timer(g_app.dht_timer);
             }
 
             g_app.key_scan_timer = vwm_create_timer(pmsg->dest_win_handle, 0, 10, 1);
             if (g_app.key_scan_timer == NULL) {
-                log_e("app_init VWM_CreateTimer error!");
+                log_e("app_init VWM_CreateTimer key_scan_timer error!");
             } else {
-                log_i("app_init VWM_CreateTimer ok!");
+                log_i("app_init VWM_CreateTimer key_scan_timer ok!");
                 vwm_start_timer(g_app.key_scan_timer);
+            }
+
+            g_app.wifi_get_ip_timer = vwm_create_timer(pmsg->dest_win_handle, 0, 5000, 1);
+            if (g_app.wifi_get_ip_timer == NULL) {
+                log_e("app_init VWM_CreateTimer wifi_get_ip_timer error!");
+            } else {
+                log_i("app_init VWM_CreateTimer wifi_get_ip_timer ok!");
+                vwm_start_timer(g_app.wifi_get_ip_timer);
             }
 
             break;
@@ -78,6 +93,10 @@ void app_dlgcallback(vwm_message_t *pmsg)
                 DHT11_Read_Data(&g_app.temp, &g_app.humi);
                 //log_i("temp: %d,humi: %d",g_app.temp,g_app.humi);
                 HAL_GPIO_TogglePin(LED_B_GPIO_Port, LED_B_Pin);
+            } else if (pmsg->data.v == g_app.wifi_get_ip_timer) {
+                log_i("get IP CIFSR...\r\n");
+                while (esp8266_send_cmd("AT+CIFSR\r\n", "OK"))
+                    ;
             }
 
             break;
