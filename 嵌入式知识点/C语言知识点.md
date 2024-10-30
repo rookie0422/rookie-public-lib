@@ -70,7 +70,7 @@ int const * a const; 	//最后一个意味着 a 是一个指向常整型数的�
 ```c
 int a0=1; 				//a0 ：全局初始化变量；生命周期为整个程序运行期间；作用域为所有文件；存储位置为 data 段。
 static int a1;			//a1 ：全局静态未初始化变量；生命周期为整个程序运行期间；作用域为当前文件；储存位置为 BSS 段。
-const static a2=0;		//a2 ：全局静态变量
+const static int a2=0;	//a2 ：全局静态变量
 extern int a3;			//a3 ：全局初始化变量；其他同 a0。
 
 void fun(void)
@@ -195,5 +195,4 @@ typeof(int) * a, b;    // int * a, b;
 #else
 #endif
 ```
-
 
