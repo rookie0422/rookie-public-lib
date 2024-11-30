@@ -1,0 +1,192 @@
+{
+  "main": {
+    "id": "290b4d0d54465b18",
+    "type": "split",
+    "children": [
+      {
+        "id": "1680f54b96c00f1c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "75564b79715ef1f3",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "新标签页"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "506969f5bbdea138",
+    "type": "split",
+    "children": [
+      {
+        "id": "9139828f8dc21ecb",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2d0fd4e85b1baefc",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "a9e864d74aa29e55",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "80351168ead03edc",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "49499ea8a769926b",
+    "type": "split",
+    "children": [
+      {
+        "id": "fcbade483ea0f093",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0c61341cfa30dd03",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": false
+              },
+              "icon": "links-coming-in",
+              "title": "反向链接"
+            }
+          },
+          {
+            "id": "16820e94bdf09e52",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": true,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "出链"
+            }
+          },
+          {
+            "id": "a73284b36cfb1f79",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "49446e03e0916550",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {},
+              "icon": "lucide-list",
+              "title": "大纲"
+            }
+          },
+          {
+            "id": "8fee3250c1281b7f",
+            "type": "leaf",
+            "state": {
+              "type": "calendar",
+              "state": {},
+              "icon": "calendar-with-checkmark",
+              "title": "Calendar"
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "horizontal",
+    "width": 384.5
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "markdown-importer:打开 Markdown 格式转换器": false,
+      "workspaces:管理工作区布局": false
+    }
+  },
+  "active": "75564b79715ef1f3",
+  "lastOpenFiles": [
+    "2024-11-30.md",
+    "LwIP.md",
+    "risc-v学习笔记.md",
+    "C语言知识点.md",
+    "img/b04896eb5c9b28539ebbec597071edb5.png",
+    "img/Pasted image 20241130160907.png",
+    "Pasted image 20241130161024.png",
+    "Pasted image 20241130160907.png",
+    "Pasted image 20241130160813.png",
+    "Pasted image 20241130160805.png",
+    "img/tx002.png",
+    "img/tx002-17329540664922.png",
+    "img/b04896eb5c9b28539ebbec597071edb5-17329539415881.png",
+    "img",
+    "risc-v学习笔记/img/b04896eb5c9b28539ebbec597071edb5.png",
+    "risc-v学习笔记/img",
+    "risc-v学习笔记",
+    "Pasted image 20241130154159.png.md",
+    "计算机网络.md",
+    "未命名.canvas"
+  ]
+}

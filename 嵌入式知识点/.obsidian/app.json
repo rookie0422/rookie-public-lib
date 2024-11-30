@@ -1,0 +1,11 @@
+{
+  "focusNewTab": true,
+  "defaultViewMode": "source",
+  "newFileLocation": "current",
+  "attachmentFolderPath": "/",
+  "showLineNumber": false,
+  "readableLineLength": true,
+  "newLinkFormat": "absolute",
+  "useMarkdownLinks": true,
+  "promptDelete": false
+}
